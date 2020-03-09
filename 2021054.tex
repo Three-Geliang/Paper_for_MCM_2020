@@ -46,24 +46,21 @@
 % 正文开始
 \section{Introduction}
 \subsection{Problem Background}
-Here is the problem background ...
+With the advance of technology and the Internet revolution, shopping online is becoming a major trend for youngsters. Different from shopping offline, online shopping has advantages. For shoppers, they are exposed to various types of products, then have more choice when buying a product. But this caused the competition between vendors much fiercer than ever. Since customer can neither feel and touch the product, nor can they see them in naked eyes, the customers' ratings and comments on shopping platforms such as Amazon influence the customer to purchase or not directly. The success or failure of a product, is greatly determined by the reviews and ratings from the customers.
 
-Two major problems are discussed in this paper, which are:
+Three major problems are discussed in this paper, which are:
 \begin{itemize}
-    \item Doing the first thing.
-    \item Doing the second thing.
+    \item How to determine whether a review or rating is informative for the company to track.
+    \item How will the ratings and comments influence the customers' view of product.
+    \item Ways to identify a potentially successful product.
+      
 \end{itemize}
 
-\subsection{Literature Review}
-A literatrue\cite{1} say something about this problem ...
-
 \subsection{Our work}
-We do such things ...
-
 \begin{enumerate}[\bfseries 1.]
-    \item We do ...
-    \item We do ...
-    \item We do ...
+    \item We used machine learning to analyze the emotions of customer's comments.
+    \item We used objected oriented programming to objectify customers and products.
+    \item We simulated the process of customers rating products.
 \end{enumerate}
 
 
@@ -74,10 +71,10 @@ The primary notations used in this paper are listed in Table \ref{tb:notation}.
 \begin{table}[!htbp]
 \begin{center}
 \caption{Notations}
-\begin{tabular}{cc}
+\begin{tabular}{cl}
 	\toprule
 	\multicolumn{1}{m{3cm}}{\centering Symbol}
-	&\multicolumn{1}{m{8cm}}{\centering Definition}\\
+	&\multicolumn{1}{m{12cm}}{Definition}\\
 	\midrule
   $P_{ol}$&Indicator of the Polarity of a comment\\
 
@@ -93,7 +90,7 @@ $d$&1-D Euclidian Distance between $P_{ol}$ and the corresponding rating ${R}$\\
 
 $d_{n}$&Normalized d by applying margin scaling method\\
 
-$T$&Measure of the identity between $P_{ol}$ of a comment and the corresponding rating ${R}$\\
+$T$&The identity between $P_{ol}$ of a comment and the corresponding rating ${R}$\\
 
 $E_{ff}$&Effectiveness of a rating-comment combination\\
 	\bottomrule
@@ -125,20 +122,19 @@ With the assumptions above, we should first find ways to extract the Polarity $P
 
 ​		But $P$ and $S$ are not the indicators we desire, as they vary a lot by the length of a comment. Therefore, we calculate the quantities of words for each comment, noted as $L_{w}$. And get our average $P_{avg}$ and $S_{avg}$ as follows:
 $$
-P_{avg} = \frac{P}{L_{w}}\\
+P_{avg} = \frac{P}{L_{w}}
+\quad\quad
 S_{avg} = \frac{S}{L_{W}}
 $$
 ​		As  $P_{avg}$, $S_{avg}$ and $L_{w}$ are all logistic values, we normalize them to $[0,1]$, and note them as $P_{ol}$,  $S_{ub}$ and $l_{w}$ in each dataset. The normalization method is as follows:
 $$
-l_{w} = \frac{L_{w} - MIN(L_{w})}{MAX(L_{w}) - MIN(L_{w})}
+l_{w} = \frac{L_{w} - \mathrm{MIN}(L_{w})}{\mathrm{MAX}(L_{w}) - \mathrm{MIN}(L_{w})}
 $$
 
 $$
-P_{ol} = \frac{P_{avg} - MIN(P_{avg})}{MAX(P_{avg}) - MIN(P_{avg})}
-$$
-
-$$
-S_{ub} = \frac{S_{avg} - MIN(S_{avg})}{MAX(S_{avg}) - MIN(S_{avg})}
+P_{ol} = \frac{P_{avg} - \mathrm{MIN}(P_{avg})}{\mathrm{MAX}(P_{avg}) - \mathrm{MIN}(P_{avg})}
+\quad\quad
+S_{ub} = \frac{S_{avg} - \mathrm{MIN}(S_{avg})}{\mathrm{MAX}(S_{avg}) - \mathrm{MIN}(S_{avg})}
 $$
 
 ​		Note that $R$ can have only five values in $\{1,2,3,4,5\}$, we also normalize it to make it coincide with other measures, meaning $R$ in the following analyzing process can only take values in $\{0,0.25,0.5,0.75,1\}$
@@ -153,7 +149,7 @@ $$
 
 ​		One of our teammate got inspired by the sigmoid function by his previous learning of Machine Learning, as it serves quite well when doing the logistic regression problem. The sigmoid function is as follows:
 $$
-Sigmoid(x) = \frac{1}{1+e^{-x}}
+\mathrm{Sigmoid}(x) = \frac{1}{1+\mathrm{e}^{-x}}
 $$
 
 
@@ -165,17 +161,17 @@ d = \vert P_{ol} - R\vert
 $$
 ​		Directly fit "$d$" as our "$x$" is clearly not a good idea, as an ideal $x$ should fit on $R$. To reach a good classification performance, we should map our $d$ to $R$ before we send our $x$ into the function. Here we choose $tan(x)$. Practical calculation shows that $d$ usually not fit the range $[0,1]$ perfectly, they close to each other a bit, so we apply the same normalization method as we have done in the preprocessing. In each dataset, we take $d_{n}$ as the normalized $d$:
 $$
-d_{n} = \frac{d - MIN(d)}{MAX(d) - MIN(d)}
+d_{n} = \frac{d - \mathrm{MIN}(d)}{\mathrm{MAX}(d) - \mathrm{MIN}(d)}
 $$
 ​		Then we map $d_{n}$ to $R$, result noted as $t(d_{n})$:
 $$
-t(d_{n}) =k* tan(\pi * (0.5-d_{n}))
+t(d_{n}) =k \tan(\pi  (0.5-d_{n}))
 $$
 ​		Now we get $t(d_{n})$ as our desired "$x$", and we send it into $Sigmoid(x)$, considering the edge points, we can define our $T$ as follows:
 $$
 {T} = \left\{\begin{matrix}
 1 &d=0\\ 
-\frac{1}{1+e^{-t(d_{n})}} & 0<d<1\\ 
+\frac{1}{1+\mathrm{e}^{-t(d_{n})}} & 0<d<1\\ 
 0 & d=1
 \end{matrix}\right.
 $$
@@ -226,7 +222,7 @@ $$
 
 ​		Relatively seen, some comments are much longer than the others, we would also like to see comments of medium size which can provide us useful information. We define our Effectiveness Indicator as $E_{ff}$:
 $$
-E_{ff}=(1-S_{ub}) * \sqrt{l_{w}}*T
+E_{ff}=(1-S_{ub}) \times \sqrt{l_{w}}\times T
 $$
 ​		We tested this by looking at the top 100 comments with the highest $E_{ff}$, useful comments with or without votes both appeared in our view, meaning this indicator do can help us pick out effective comments.
 
