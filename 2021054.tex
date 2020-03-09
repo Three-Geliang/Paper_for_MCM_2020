@@ -181,6 +181,7 @@ For the pacifier
 \end{equation*}
 
 \subsection{The influence among different star ratings and reviews}
+\label{sec:The influence among different star ratings and reviews}
 
 For customers, writing reviews and rating products are commonly not completely an individual behavior. For instance, if you see others giving bad comments to a product, you will tend to think that the product is not as good as the product it actually is. In finding how previous reviews and star ratings may infect a customer's view of a product, we made the following assumptions
 
@@ -256,6 +257,48 @@ That is probably because the 2 constants are properties of customers, and are no
   \caption{Our model fits well on other products}
   \label{fig:}
 \end{figure}
+
+\subsection{Predict the future of the 3 products}
+
+Since the data of star rating we created can successfully fit the real star ratings of all the 3 products, if we create more customers, we can predict their ratings as well.
+
+Our assumptions is the same as before. And to ensure the future customers is the same as the customers we had known from data, we assume the polarity and subjectivity obey normal distribution.
+
+We used the \textbf{Distribution Fitter} app in \textbf{MATLAB} to find the $\sigma$ and $\mu$ of the normal distribution polarity and subjectivity obeys. And we created future customers, whose polarity and subjectivity is generated from the 2 normal distribution we just known.
+
+The rating customers gave before being influenced by other reviews are linearly dependent with their polarity. And the relation is already known in section \ref{sec:The influence among different star ratings and reviews}
+
+For the hair dryers and the pacifier, we created 5000 future customers, and the distribution of their ratings are shown below
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q3picture/hair_dryer.jpg}
+    \caption{The distribution of star ratings of hair dryer}
+    \label{fig:}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q3picture/pacifier.jpg}
+    \caption{The distribution of star ratings of pacifier}
+    \label{fig:}
+  \end{subfigure}
+  \caption{The future star ratings our model predicted}
+  \label{fig:}
+\end{figure}
+
+We can see that future customers tend to give 4 stars, and the reputation of the 2 products may stay unchanged.
+
+But for the microwave, we created 500 future customers, and found out the future customers spoke highly of the microwave, compared to the customers we known from data. Less 1 star ratings are generated, more high star ratings appeared. This indicates that the microwave may has potential to success.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{Q3picture/microwave.jpg}
+  \caption{The future star ratings of microwave we predicted}
+  \label{fig:}
+\end{figure}
+
+
 
 \section{Strengths and Weaknesses}
 \subsection{Strengths}
