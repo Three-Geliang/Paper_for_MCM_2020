@@ -5,6 +5,8 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{listings}
+\usepackage{xcolor}
 % 本模板不需要填写年份，以当前电脑时间自动生成
 % 请在以下的方括号中填写队伍控制号
 \usepackage[2021054]{easymcm}  % 载入 EasyMCM 模板文件
@@ -178,24 +180,81 @@ For the pacifier
   \end{aligned}
 \end{equation*}
 
+\subsection{The influence among different star ratings and reviews}
+
+For customers, writing reviews and rating products are commonly not completely an individual behavior. For instance, if you see others giving bad comments to a product, you will tend to think that the product is not as good as the product it actually is. In finding how previous reviews and star ratings may infect a customer's view of a product, we made the following assumptions
+
+\begin{enumerate}[\bfseries 1.]
+\item Assume that the customer is only infected by previous reviews and star ratings. Customers may not be infected by the vendors, the shopping platforms, etc. The final star rating is decided by the customer's experience and other's ratings.
+\item Assume that the customer is more convinced by the reviews whose star rating is close to his own star rating.
+\item Assume the customer tend to read from the latest reviews rather than reviews far previous.
+\item Assume the number of reviews a customer tends to see obeys normal distribution, and the average reviews a customer wants to see is 5. So that the user won't see a review which is created, for example, 1 year ago. When the reviews are created doesn't matter in this problem.
+\end{enumerate}
+
+According to the first 2 assumptions, we define the influence, to determine in what degree others' reviews may effect a customer's review. Because the reviews is linearly related with the star rating, we use star rating to represent the customers' attitude towards the product. We define
+\begin{equation*}
+  \begin{aligned}
+    I = k_1 (R - \bar{R}) + k_2 (R - \bar{R}_{star})
+  \end{aligned}
+\end{equation*}
+Whereas $I$ is the influence, $R$ is the star rating customer tend to give before seeing others reviews, $\bar{R}$ is the average star rating of product before the user gives a rating, which indicates the quality of a product at that time. $\bar{R}_{star}$ is the average of star rating the customer seen, $k_1$ and $k_2$ are constants.
+
+We used object oriented programming of \textbf{MATLAB} to solve the problem. The source code of the program is in \textbf{Appendix}
+
+In the program, we defined 2 classes: Customer and Product. Customers has properties like polarity and subjectivity, and product has reviews given by customers. We created the same amount of customers given by the data, set $k_1$ and $k_2$ to different values, then set the polarity and subjectivity of the created customers to the real customers' polarity and subjectivity. And let them to give star ratings of the product one by one in order.
+
+Each customer will see random amount of previous reviews, and the star rating a customer finally give in the stars he may give before seeing the reviews plus the influence $I$
+
+We carefully adjust the 2 constants, until the distribution of star ratings those customers gave is similar to the real star ratings in data.
+
+We used the data of hair dryer. When we set $k_1=0.7$ and $k_2=0.13$, we found the data we manually created was quite similar with the real one. The following graph shows the distribution of star ratings and the difference between the real data and the data we created.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{Q4picture/0.jpg}
+  \caption{The distribution of star ratings of hair dryer}
+  \label{fig:}
+\end{figure}
+
+Since the customers see random numbers of previous reviews and star ratings, to show our model is stable, we ran the program for 2 more times. And the outputs are almost the same.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q4picture/1.jpg}
+    \label{fig:}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q4picture/2.jpg}
+    \label{fig:}
+  \end{subfigure}
+  \caption{The program gave us same result each time we ran}
+  \label{fig:}
+\end{figure}
+
+Then we applied the same model to the pacifier and the microwave, and , surprisingly, we founded out that for different products, the 2 constants, $k_1$ and $k_2$, are the same.
+
+That is probably because the 2 constants are properties of customers, and are not related to certain products, and the customers are the same. These 2 graphs show that our model fixed well on the microwave and pacifier as well.
 
 
-
-
-
-\subsubsection{Detail 1 about Model 1}
-The detail can be described by equation \eqref{eq:heat}:
-\begin{equation}\label{eq:heat}
-\frac{\partial u}{\partial t} - a^2 \left( \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} + \frac{\partial^2 u}{\partial z^2} \right) = f(x, y, z, t)
-\end{equation}
-
-\subsection{Model 2}
-The results are shown in Figure \ref{fig:result}, where $t$ denotes the time in seconds, and $c$ refers to the concentration of water in the boiler.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=.6\textwidth]{water.png}
-\caption{The result of Model 2}\label{fig:result}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q4picture/microwave}
+    \caption{The distribution of star ratings of microwave}
+    \label{fig:}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q4picture/pacifier}
+    \caption{The distribution of star ratings of pacifier}
+    \label{fig:}
+  \end{subfigure}
+  \caption{Our model fits well on other products}
+  \label{fig:}
 \end{figure}
 
 \section{Strengths and Weaknesses}
@@ -245,15 +304,115 @@ According to all those mentioned above, it is really worth to have a try on \LaT
 % 如您的论文中不需要附录，请自行删除
 \begin{subappendices}  % 附录环境
 
-\section{Appendix A: Further on \LaTeX}
-To clarify the importance of using \LaTeX\ in MCM or ICM, several points need to be covered, which are \ldots
+  \section{Appendix: The source code of our program used to creating customers and rate products}
+  \noindent
+Main.m
+\lstset{
+ basicstyle=\ttfamily,
+ breaklines=true,
+ columns=fixed,       
+ numbers=left,                                        % 在左侧显示行号
+ numberstyle=\tiny\color{gray},                       % 设定行号格式
+ frame=single,                                          % 不显示背景边框
+ backgroundcolor=\color[RGB]{245,245,244},            % 设定背景颜色
+ keywordstyle=\color[RGB]{40,40,255},                 % 设定关键字颜色
+ numberstyle=\footnotesize\color{darkgray},           
+ commentstyle=\it\color[RGB]{0,96,96},                % 设置代码注释的格式
+ stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},   % 设置字符串格式
+ showstringspaces=false,                              % 不显示字符串中的空格
+ language=octave,                                        % 设置语言
+}
 
-To be more specific, \ldots
+\begin{lstlisting}
+clc, clear
 
-All in all, \ldots
+k1=0.7;
+k2=0.13;
 
-Anyway, nobody \textbf{really} needs such appendix \ldots
+load('data.mat')
+real_product = Product(star_rating, polarity, subjectivity);
+real_products_in_total = size(real_product.reviews,1);
 
+customers_index = 1:real_products_in_total;
+
+virtual_product = Product(3,0,0.5);
+for i = customers_index
+    new_customer = Customer(virtual_product, star_rating(i,1), polarity(i,1), subjectivity(i,1), k1, k2);
+    new_review = [new_customer.rating,new_customer.polarity,new_customer.subjectivity];
+    new_virtual_product = Product([virtual_product.reviews(:,1);new_review(:,1)],[virtual_product.reviews(:,2);new_review(:,2)],[virtual_product.reviews(:,3);new_review(:,3)]);
+    virtual_product = new_virtual_product;
+end
+virtual_ratings = virtual_product.reviews(2:real_products_in_total,1);
+% plot(1:real_products_in_total-1, transpose(virtual_ratings),'*')
+virtual_ratings_freq = [sum(virtual_ratings(:) <= 1);sum(virtual_ratings(:) == 2);sum(virtual_ratings(:) == 3);sum(virtual_ratings(:) == 4);sum(virtual_ratings(:) >= 5)];
+real_ratings_freq = [sum(star_rating(:) <= 1);sum(star_rating(:) == 2);sum(star_rating(:) == 3);sum(star_rating(:) == 4);sum(star_rating(:) >= 5)];
+error_of_ratings_freq = sum(abs(virtual_ratings_freq - real_ratings_freq));
+bar([virtual_ratings_freq,real_ratings_freq])
+legend('virtual ratings','real ratings')
+xlabel('stars')
+ylabel('numbers')
+title(['k1=',num2str(k1),', k2=',num2str(k2),', error=', num2str(error_of_ratings_freq)])
+\end{lstlisting}
+\newpage
+\noindent
+Customer.m
+\begin{lstlisting}
+classdef Customer
+    properties
+        reviews_wants_to_see
+        polarity
+        subjectivity
+        rating
+        real_rating
+        product
+        k1
+        k2
+    end
+    methods
+        function obj = Customer(product, real_rating, real_polarity, real_subjectivity, k1, k2)
+            obj.k1 = k1;
+            obj.k2 = k2;
+            obj.reviews_wants_to_see = round(max(0,normrnd(5,3)));
+            obj.polarity = real_polarity;
+            obj.subjectivity = real_subjectivity;
+            obj.product = product;
+            obj.real_rating = real_rating;
+            obj.rating = rate(obj);
+        end
+        function influence_parameter = generateInfluenceParameter(obj)
+            influence_parameter = 1;
+        end
+        function rating = rate(obj)
+            total_number_of_reviews = size(obj.product.reviews, 1);
+            numbers_of_reviews_being_seen = min(total_number_of_reviews, obj.reviews_wants_to_see);
+            reviews_being_seen = obj.product.reviews(total_number_of_reviews - numbers_of_reviews_being_seen + 1:total_number_of_reviews,:);
+            if size(reviews_being_seen,1) == 0
+                reviews_being_seen = 0;
+            end
+            influence = (obj.k1*(obj.real_rating - obj.product.quality) + obj.k2 * numbers_of_reviews_being_seen * (obj.real_rating - mean(reviews_being_seen(:,1))));
+            rating = round(influence + obj.product.quality);
+        end  
+    end
+end
+\end{lstlisting}
+\newpage
+\noindent
+Product.m
+\begin{lstlisting}
+classdef Product
+    properties
+        quality
+        reviews
+    end
+    
+    methods
+        function obj = Product(star_rating, polarity, subjectivity)
+            obj.quality = mean(star_rating);
+            obj.reviews = [star_rating polarity subjectivity];
+        end
+    end
+end
+\end{lstlisting}
 \end{subappendices}
 
 \end{document}  % 结束
