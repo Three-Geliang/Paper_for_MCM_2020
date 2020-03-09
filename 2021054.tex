@@ -47,28 +47,34 @@
 \section{Introduction}
 \subsection{Problem Background}
 With the advance of technology and the Internet revolution, shopping online is becoming a major trend for youngsters. Different from shopping offline, online shopping has advantages. For shoppers, they are exposed to various types of products, then have more choice when buying a product. But this caused the competition between vendors much fiercer than ever. Since customer can neither feel and touch the product, nor can they see them in naked eyes, the customers' ratings and comments on shopping platforms such as Amazon influence the customer to purchase or not directly. The success or failure of a product, is greatly determined by the reviews and ratings from the customers.
+\newline
 
-Three major problems are discussed in this paper, which are:
+\noindent
+Five major problems are discussed in this paper, which are:
 \begin{itemize}
     \item How to determine whether a review or rating is informative for the company to track.
     \item How will the ratings and comments influence the customers' view of product.
     \item Ways to identify a potentially successful product.
+    \item Defining time-based measures that might suggest whether a product's reputation is increasing or decreasing.
+    \item In what way is the star rating the customer gave relates with his comments.
+      
       
 \end{itemize}
+
 
 \subsection{Our work}
 \begin{enumerate}[\bfseries 1.]
     \item We used machine learning to analyze the emotions of customer's comments.
     \item We used objected oriented programming to objectify customers and products.
+      \item We found out how previous reviews and ratings of a product may influence a customer to rate.
     \item We simulated the process of customers rating products.
+    \item We developed a time-based measure that might suggest a product's reputation is increasing or decreasing.
+      \item We defined a method to measure the effectiveness of a customer's comment.
 \end{enumerate}
-
-
-
 
 \section{Notations}
 The primary notations used in this paper are listed in Table \ref{tb:notation}.
-\begin{table}[!htbp]
+\begin{table}[H]
 \begin{center}
 \caption{Notations}
 \begin{tabular}{cl}
@@ -92,7 +98,20 @@ $d_{n}$&Normalized d by applying margin scaling method\\
 
 $T$&The identity between $P_{ol}$ of a comment and the corresponding rating ${R}$\\
 
-$E_{ff}$&Effectiveness of a rating-comment combination\\
+  $E_{ff}$&Effectiveness of a rating-comment combination\\
+  $R_{epu}$&Indicator of product reputation\\
+
+$t$&Time increment measured by days since the earliest date\\
+
+$P_{ol\_hist}(t)$&Indicator of historical polarity until day $t$\\
+
+$T_{hist}(t)$&Indicator of historical $T$ until day $t$\\
+
+$R_{hist}(t)$&Indicator of historical rating until day $t$\\
+
+$R_{epu\_hist}(t)$&Indicator of historical reputation until day $t$\\
+
+$S(t)$&Quantity of all items on a dataset before day $t$\\
 	\bottomrule
 \end{tabular}\label{tb:notation}
 \end{center}
@@ -227,6 +246,83 @@ $$
 ​		We tested this by looking at the top 100 comments with the highest $E_{ff}$, useful comments with or without votes both appeared in our view, meaning this indicator do can help us pick out effective comments.
 
 
+
+\subsection{Statistics on a timeline}
+
+​		To talk about this problem, we first need to define what a timeline is on each dataset. Considering the variance of data, we cannot assure that the earliest items of all three datasets take place on the same day. Therefore we use relative increment to represent the shift of time.
+
+​		On a specific dataset, we take $D_{current}$ as the current date and $D_{earliest}$ as the earliest date in the dataset, then we define the time increment $t$ as follows:
+$$
+t = D_{current} - D_{earliest}
+$$
+​		This is easy to calculate on a modern computer as date is also stored as time increment since Jan. 1st, 1970.
+
+​		With a timeline, we can define some useful statistical indicators based on days:
+$$
+P_{ol\_hist}(t) = \frac{\sum_{0}^{t} P_{ol}}{S(t)}
+$$
+
+$$
+T_{hist}(t) = \frac{\sum_{0}^{t} T}{S(t)}
+$$
+
+$$
+R_{hist}(t) = \frac{\sum_{0}^{t} R}{S(t)}
+$$
+
+​		We use the pacifier dataset to calculate indicators above, then plot the $P_{ol\_hist}(t)-t$ and the $R_{hist}(t)-t$ graph here:
+
+​		Note that in both graphs, $t$ is normalized.
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q2picture/Pol_hist-t.png}
+    \label{fig:}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q2picture/R_hist-t.png}
+    \label{fig:}
+  \end{subfigure}
+  \caption{the $P_{ol\_hist}(t)-t$ and the $R_{hist}(t)-t$ graph}
+  \label{fig:}
+\end{figure}
+
+
+​		Turning points are very important because we may potentially find useful information, like the adjustments made to advertising, to products and so on; however, we may notice turning points in one graph vary from those in another. Therefore we start to think about the necessity of a new indicator which reconciles both two important indicators about customers' experience.
+
+​		We call it Reputation Indicator, noted as $R_{epu}$. We used the weakening feature of $T$ to lower the impact of $P_{ol}$ on our $R_{epu}$.
+$$
+R_{epu} = T \times P_{ol} + R
+$$
+​		And correspondingly, we have its historical average:
+$$
+R_{epu\_hist}(t) = \frac{\sum_{0}^{t} R_{epu}}{S(t)}
+$$
+​		We plot the $T_{hist}(t)-t$ and the $R_{epu\_hist}(t)-t$ graph on the pacifier dataset as follow:
+
+​		Note that in both graphs, $t$ is normalized.
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q2picture/T_hist-t.png}
+    \label{fig:}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Q2picture/Repu_hist-t.png}
+    \label{fig:}
+  \end{subfigure}
+  \caption{the $T_{hist}(t)-t$ and the $R_{epu\_hist}(t)-t$ graph}
+  \label{fig:}
+\end{figure}
+
+
+​		From approximately $t = 0.45$, when the data points got denser since then, $T$ slightly drops from 0.39 to lower than 0.36. However, our $R_{epu\_hist}(t)$ still remained the increasing trend, meaning it making obvious progress on the pacifier product.
+
+​		Talking about the turning points in the $R_{epu\_hist}(t)-t$ graph, it is noticeable that the turning points of the TWO graphs above mostly appeared on this one, though we have a more smoothly increasing curve.
 
 % \subsection{The subjectivity and polarity of a customer's review}
 % We assumed that each word, in the customers' reviews, has 2 properties: \textbf{subjectivity} and \textbf{polarity}. Subjective $s_{word}$ describes in what degree the word is subjective, ranges from 0 to 1. The higher $s_{word}$ is, the more subjective a word is. Polarity $p_{word}$ describes how much the customer loves or hates the product when writing the word, ranges from -1 to 1. We then define the subjectivity and the polarity of a sentences $s_{sentence}$ and $p_{sentence}$, which is the average of all the words in a sentences. Assume the number of words in a sentence is $n$, then
@@ -445,7 +541,8 @@ But for the microwave, we created 500 future customers, and found out the future
 \begin{itemize}
 \item We used object oriented programming, which means that our models are extensible and easy to understand. For example, if you need to edit the behavior of customer, you may just edit the customer class, add some functions or properties into it.
   \item We took random factors into our consideration. For example, the customers see random amount of previous ratings, the properties of our created future customers is random.
-    \item The simulated data our model outputs fits the real data quite well.
+  \item The simulated data our model outputs fits the real data quite well.
+    \item The 2 constants, $k_1$ and $k_{2}$, is not related to products. So our model can be applied to other products.
 \end{itemize}
 
 \subsection{Weaknesses}
@@ -479,8 +576,10 @@ According to all those mentioned above, it is really worth to have a try on \LaT
 
 % 参考文献，此处以 MLA 引用格式为例
 \begin{thebibliography}{99}
-\bibitem{1} Einstein, A., Podolsky, B., \& Rosen, N. (1935). Can quantum-mechanical description of physical reality be considered complete?. \emph{Physical review}, 47(10), 777.
-\bibitem{2} \emph{A simple, easy \LaTeX\ template for MCM/ICM: EasyMCM}. (2018). Retrieved December 1, 2019, from\url{https://www.cnblogs.com/xjtu-blacksmith/p/easymcm.html}
+\bibitem{1} MATLAB Documentation - MathWorks, from\url{https://www.mathworks.com/help/matlab/}
+\bibitem{2} TextBlob: Simplified Text Processing, from\url{https://textblob.readthedocs.io/en/dev/}
+\bibitem{3} Matplotlib: Python plotting — Matplotlib 3.2.0 documentation, from\url{https://matplotlib.org/users/index.html}
+
 \end{thebibliography}
 
 
