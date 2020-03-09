@@ -14,7 +14,7 @@
 \usepackage{mathptmx}  % 这是 Times 字体，中规中矩 
 %\usepackage{mathpazo}  % 这是 COMAP 官方杂志采用的更好看的 Palatino 字体，可替代以上的 mathptmx 宏包
 
-\title{An MCM Paper Made by Team 1234567}  % 标题
+\title{Past Tells a Lot:\\Indicators and Predictive Models for Future Market Reaction}  % 标题
 
 % 如需要修改题头（默认为 MCM/ICM），请使用以下命令（此处修改为 MCM）
 %\renewcommand{\contest}{MCM}
@@ -24,13 +24,12 @@
 
 % 此处填写摘要内容
 \begin{abstract}
-    Here is the abstract of your paper.
-
-    Firstly, that is ...
-
-    Secondly, that is ...
-
-    Finally, that is ...
+  In recent years, online shopping has become a new fashion. Retailers have realized it and started to pay more attention to the online market.
+Before we started analyzing the sales records of the Sunshine Company, we quantified the emotional and the rational tendency of the reviews, set up two prerequisite measures called \textbf{Polarity} and \textbf{Subjectivity}.
+Firstly, we designed indicators by Bootstrapping to measure the effectiveness of a review. We defined our \textbf{Trust Indicator $T$} to sieve out trustworthy combinations of ratings and reviews. Then we established the\textbf{ Effectiveness Indicator $E_{ff}$} by reconciling the length of comments, $T$, and the Subjectivity to tell if a comment is useful.
+Secondly, we studied the interaction between ratings. By creating virtual customers to fit the actual rating records, we discovered a pattern which suggests the clustering effect of rating in a specific period. We named it \textbf{Interactive Rating Model}, and it helps company realize the importance of their reputation.
+Finally, we used our “virtual customers” to predict future ratings based on the data we already had. Our prediction showed the consistency of the clustering effect. It enlightens companies that even avoiding a succession of negative ratings can help promote future market feedbacks.
+It is also worth mentioning that we managed to ensure the stability of our indicators and models, making them generally adaptive. Since we implemented object-oriented programming, we can simply just feed in new data when needed to study new products, and our codes will solve the rest.
 
     % 美赛论文中无需注明关键字。若您一定要使用，
     % 请将以下两行的注释号 '%' 去除，以使其生效
@@ -65,7 +64,7 @@ Five major problems are discussed in this paper, which are:
 \subsection{Our work}
 \begin{enumerate}[\bfseries 1.]
     \item We used machine learning to analyze the emotions of customer's comments.
-    \item We used objected oriented programming to objectify customers and products.
+    \item We used object-oriented programming to objectify customers and products.
       \item We found out how previous reviews and ratings of a product may influence a customer to rate.
     \item We simulated the process of customers rating products.
     \item We developed a time-based measure that might suggest a product's reputation is increasing or decreasing.
@@ -436,7 +435,7 @@ According to the first 2 assumptions, we define the influence, to determine in w
 \end{equation*}
 Whereas $I$ is the influence, $R$ is the star rating customer tend to give before seeing others reviews, $\bar{R}$ is the average star rating of product before the user gives a rating, which indicates the quality of a product at that time. $\bar{R}_{star}$ is the average of star rating the customer seen, $k_1$ and $k_2$ are constants.
 
-We used object oriented programming of \textbf{MATLAB} to solve the problem. The source code of the program is in \textbf{Appendix}
+We used object-oriented programming of \textbf{MATLAB} to solve the problem. The source code of the program is in \textbf{Appendix}
 
 In the program, we defined 2 classes: Customer and Product. Customers has properties like polarity and subjectivity, and product has reviews given by customers. We created the same amount of customers given by the data, set $k_1$ and $k_2$ to different values, then set the polarity and subjectivity of the created customers to the real customers' polarity and subjectivity. And let them to give star ratings of the product one by one in order.
 
@@ -539,7 +538,7 @@ But for the microwave, we created 500 future customers, and found out the future
 \section{Strengths and Weaknesses}
 \subsection{Strengths}
 \begin{itemize}
-\item We used object oriented programming, which means that our models are extensible and easy to understand. For example, if you need to edit the behavior of customer, you may just edit the customer class, add some functions or properties into it.
+\item We used object-oriented programming, which means that our models are extensible and easy to understand. For example, if you need to edit the behavior of customer, you may just edit the customer class, add some functions or properties into it.
   \item We took random factors into our consideration. For example, the customers see random amount of previous ratings, the properties of our created future customers is random.
   \item The simulated data our model outputs fits the real data quite well.
     \item The 2 constants, $k_1$ and $k_{2}$, is not related to products. So our model can be applied to other products.
@@ -554,23 +553,44 @@ But for the microwave, we created 500 future customers, and found out the future
 % 以下为信件/备忘录部分，不需要可自行去掉
 % 如有需要可将整个 letter 环境移动到文章开头或中间
 % 请在后一个花括号内填写信件（Letter）或备忘录（Memorandum）标题
-\begin{letter}{Memorandum}
-\begin{flushleft}  % 左对齐环境，无首行缩进
-\textbf{To:} Heishan Yan\\
-\textbf{From:} Team XXXXXXX\\
-\textbf{Date:} October 1st, 2019\\
-\textbf{Subject:} A better choice than MS Word: \LaTeX
-\end{flushleft}
+ \begin{letter}{A Letter to the CMO of Sunshine Company}
+   \noindent
+   \textbf{\Large A Good Reputation Makes Things Perfect}
+   
+\noindent
+Dear CMO of the Sunshine Company,
 
-In the memo, we want to introduce you an alternate typesetting program to the prevailing MS Word: \textbf{\LaTeX}. In fact, the history of \LaTeX\ is even longer than that of MS Word. In 1970s, the famous computer scientist Donald Knuth first came out with a typesetting program, which named \TeX\ \ldots
+​I would like to extend my most sincere greetings to you.
 
-Firstly, \ldots
+​We are honored to be your consultant team to assist you analyzing the marketing data of your company, hoping to find potentially successful business models and to provide constructive advice. After struggling for four days, we have completed our analysis, and we are very delighted to share our insights with you.
 
-Secondly, \ldots
+​Starting from the measurement of the comment effectiveness, we based our work on it and developed a set of methods to show how reviews affect each other and to predict short-term market reactions. Here is what we want you to know:
 
-Lastly, \ldots
+\noindent
+\textbf{We ​found a model that can extract highly informative comments.}
 
-According to all those mentioned above, it is really worth to have a try on \LaTeX! 
+    We proposed our Trust \& Effectiveness indicators, showing that middle-rated, moderately lengthy, and objective comments tend to be most useful. And we verified our proposition by listing out those comments we believe useful. Please take a look at them with our methods.
+
+\noindent
+\textbf{We proposed a model revealing how rating impact each other to predict the future reputation.}
+    
+    According to the data, we find previous ratings may affect the future ones. We proposed a model to predict future sales trend by measuring and fitting interactions between ratings. By our modeling, we noticed that new ratings tend to cluster. The actual rating of consumers is not only determined by their consumption experience, but also affected by pervious rating, the gap between new rating and total star rating, or the recent rating gap. And the greater the gap, the greater the effects will be.
+
+\noindent
+\textbf{We analyzed the sales status of the product.}
+    
+By creating hundreds of people, virtually reading previous reviews, we found that bad ratings close to the present one may result in the dropping of the future reputation, and customer impression as well. Take the example of the microwaves, recent negative comments would make future trend of rating to stay low, even if the essence of your product has never changed.
+
+​Overall, we would like you to read less about accusation but longer and more objective comments. Accusation sometimes can only be accusation itself, but comments with customers' analysis would be mostly sincere and informative. Also, never underestimate the impact of your business reputation’s influence ability, previous reviews stand for it. It hardly fades away and would impact on your future sales. A better after-sale service may help you avoid continuous bad comments.
+
+​We wish you prosperous.
+
+\begin{flushright}
+ Sincerely,
+
+Team \#2021054
+
+\end{flushright}
 \end{letter}
 
 
