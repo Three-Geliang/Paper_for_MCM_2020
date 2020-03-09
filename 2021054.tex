@@ -14,7 +14,13 @@
 \usepackage{mathptmx}  % 这是 Times 字体，中规中矩 
 %\usepackage{mathpazo}  % 这是 COMAP 官方杂志采用的更好看的 Palatino 字体，可替代以上的 mathptmx 宏包
 
-\title{Past Tells a Lot:\\Indicators and Predictive Models for Future Market Reaction}  % 标题
+\title{
+  \begin{flushleft}
+    \huge
+    \quad Past Tells a Lot:\\Indicators and Predictive Models for\\
+  \hspace{6.5cm} Future Market Reaction 
+  \end{flushleft}
+}  % 标题
 
 % 如需要修改题头（默认为 MCM/ICM），请使用以下命令（此处修改为 MCM）
 %\renewcommand{\contest}{MCM}
@@ -25,11 +31,15 @@
 % 此处填写摘要内容
 \begin{abstract}
   In recent years, online shopping has become a new fashion. Retailers have realized it and started to pay more attention to the online market.
-Before we started analyzing the sales records of the Sunshine Company, we quantified the emotional and the rational tendency of the reviews, set up two prerequisite measures called \textbf{Polarity} and \textbf{Subjectivity}.
-Firstly, we designed indicators by Bootstrapping to measure the effectiveness of a review. We defined our \textbf{Trust Indicator $T$} to sieve out trustworthy combinations of ratings and reviews. Then we established the\textbf{ Effectiveness Indicator $E_{ff}$} by reconciling the length of comments, $T$, and the Subjectivity to tell if a comment is useful.
-Secondly, we studied the interaction between ratings. By creating virtual customers to fit the actual rating records, we discovered a pattern which suggests the clustering effect of rating in a specific period. We named it \textbf{Interactive Rating Model}, and it helps company realize the importance of their reputation.
-Finally, we used our “virtual customers” to predict future ratings based on the data we already had. Our prediction showed the consistency of the clustering effect. It enlightens companies that even avoiding a succession of negative ratings can help promote future market feedbacks.
-It is also worth mentioning that we managed to ensure the stability of our indicators and models, making them generally adaptive. Since we implemented object-oriented programming, we can simply just feed in new data when needed to study new products, and our codes will solve the rest.
+  Before we started analyzing the sales records of the Sunshine Company, we quantified the emotional and the rational tendency of the reviews, set up two prerequisite measures called \textbf{Polarity} and \textbf{Subjectivity}.
+  
+  Firstly, we designed indicators by Bootstrapping to measure the effectiveness of a review. We defined our \textbf{Trust Indicator $T$} to sieve out trustworthy combinations of ratings and reviews. Then we established the\textbf{ Effectiveness Indicator $E_{ff}$} by reconciling the length of comments, $T$, and the Subjectivity to tell if a comment is useful.
+  
+  Secondly, we studied the interaction between ratings. By creating \textbf{virtual customers} to fit the actual rating records, we discovered a pattern which suggests the clustering effect of rating in a specific period. We named it \textbf{Interactive Rating Model}, and it helps company realize the importance of their reputation.
+  
+  Finally, we used our “virtual customers” to \textbf{predict} future ratings based on the data we already had. Our prediction showed the consistency of the clustering effect. It enlightens companies that even avoiding a succession of negative ratings can help promote future market feedback.
+  
+It is also worth mentioning that we managed to ensure the stability of our indicators and models, making them \textbf{generally adaptive}. Since we implemented \textbf{object-oriented programming}, we can simply just feed in new data when needed to study new products, and our codes will solve the rest.
 
     % 美赛论文中无需注明关键字。若您一定要使用，
     % 请将以下两行的注释号 '%' 去除，以使其生效
@@ -71,6 +81,7 @@ Five major problems are discussed in this paper, which are:
       \item We defined a method to measure the effectiveness of a customer's comment.
 \end{enumerate}
 
+\newpage
 \section{Notations}
 The primary notations used in this paper are listed in Table \ref{tb:notation}.
 \begin{table}[H]
@@ -79,7 +90,7 @@ The primary notations used in this paper are listed in Table \ref{tb:notation}.
 \begin{tabular}{cl}
 	\toprule
 	\multicolumn{1}{m{3cm}}{\centering Symbol}
-	&\multicolumn{1}{m{12cm}}{Definition}\\
+	&\multicolumn{1}{m{12cm}}{\centering Definition}\\
 	\midrule
   $P_{ol}$&Indicator of the Polarity of a comment\\
 
@@ -122,7 +133,7 @@ $S(t)$&Quantity of all items on a dataset before day $t$\\
 
 \subsubsection{Basic assumptions}
 
-To analyze comments, ratings combined with other data, traditionally we can simply use supervised learning algorithms, however, it would require clear labels for each combination in the dataset. Without labels, we must first find a way to understand the information lies within texts, and MOST importantly, extract indicative, quantitative measures for further analysis.
+To analyze comments, ratings combined with other data, traditionally we can simply use supervised learning algorithms, however, it would require clear labels for each combination in the dataset. Without labels, we must first find a way to understand the information lies within texts, and \emph{most} importantly, extract indicative, quantitative measures for further analysis.
 
 ​		From our daily language usage, it is not hard to find that emotional words have a kind of polarity from negative to positive. And more interestingly, similar emotional word tend to cluster. Although emotional transition do exist, it would be easy to distinguish by acknowledge some conjunctions and commas.
 
@@ -151,7 +162,9 @@ $$
 
 $$
 P_{ol} = \frac{P_{avg} - \mathrm{MIN}(P_{avg})}{\mathrm{MAX}(P_{avg}) - \mathrm{MIN}(P_{avg})}
-\quad\quad
+$$
+
+$$
 S_{ub} = \frac{S_{avg} - \mathrm{MIN}(S_{avg})}{\mathrm{MAX}(S_{avg}) - \mathrm{MIN}(S_{avg})}
 $$
 
@@ -188,8 +201,11 @@ $$
 ​		Now we get $t(d_{n})$ as our desired "$x$", and we send it into $Sigmoid(x)$, considering the edge points, we can define our $T$ as follows:
 $$
 {T} = \left\{\begin{matrix}
-1 &d=0\\ 
-\frac{1}{1+\mathrm{e}^{-t(d_{n})}} & 0<d<1\\ 
+    1 &d=0\\
+    \\
+    \dfrac{1}{1+\mathrm{e}^{-t(d_{n})}} & 0<d<1\\
+    \\
+    
 0 & d=1
 \end{matrix}\right.
 $$
@@ -233,10 +249,11 @@ $$
 ​		Since we already have $T$, we should use it along with other data we have to design a much more reliable indicator to help us find effective comments.
 
 ​		Relating to our daily life, we think a effective comment should be:
-
-- With sufficient textual information
-- Mostly objective
-- Trustworthy
+\begin{itemize}
+\item With sufficient textual information
+\item Mostly objective
+  \item  Trustworthy
+\end{itemize}
 
 ​		Relatively seen, some comments are much longer than the others, we would also like to see comments of medium size which can provide us useful information. We define our Effectiveness Indicator as $E_{ff}$:
 $$
@@ -321,7 +338,7 @@ $$
 
 ​		From approximately $t = 0.45$, when the data points got denser since then, $T$ slightly drops from 0.39 to lower than 0.36. However, our $R_{epu\_hist}(t)$ still remained the increasing trend, meaning it making obvious progress on the pacifier product.
 
-​		Talking about the turning points in the $R_{epu\_hist}(t)-t$ graph, it is noticeable that the turning points of the TWO graphs above mostly appeared on this one, though we have a more smoothly increasing curve.
+​		Talking about the turning points in the $R_{epu\_hist}(t)-t$ graph, it is noticeable that the turning points of the \emph{two} graphs above mostly appeared on this one, though we have a more smoothly increasing curve.
 
 % \subsection{The subjectivity and polarity of a customer's review}
 % We assumed that each word, in the customers' reviews, has 2 properties: \textbf{subjectivity} and \textbf{polarity}. Subjective $s_{word}$ describes in what degree the word is subjective, ranges from 0 to 1. The higher $s_{word}$ is, the more subjective a word is. Polarity $p_{word}$ describes how much the customer loves or hates the product when writing the word, ranges from -1 to 1. We then define the subjectivity and the polarity of a sentences $s_{sentence}$ and $p_{sentence}$, which is the average of all the words in a sentences. Assume the number of words in a sentence is $n$, then
@@ -344,7 +361,7 @@ $$
 
 To find the relation between rating levels and customer reviews, first we need to convert customer reviews, which is text based information, to numeric numbers. As we said in section \ref{sec:Extractions from comments}, we calculated the subjectivity and polarity of each customer, according to their reviews. And we used the \textbf{Curve Fitting} app in \textbf{MATLAB}, trying to fit a curve.
 We imported the subjectivity, polarity and star ratings data of all the 3 products separately into \textbf{MATLAB}, and plotted the data. Then we could see from the graph that the polarity seemed to be linearly dependent with star rating, and the polarity is not dependent with star rating.
-Then we used Linear Method to fit the data. These following graphs shows the relation between polarity, subjectivity and star rating of the 3 different products.
+Then we used \textbf{Linear Method} to fit the data. These following graphs shows the relation between polarity, subjectivity and star rating of the 3 different products.
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\textwidth}
@@ -418,7 +435,7 @@ For the pacifier
 \subsection{The influence among different star ratings and reviews}
 \label{sec:The influence among different star ratings and reviews}
 
-For customers, writing reviews and rating products are commonly not completely an individual behavior. For instance, if you see others giving bad comments to a product, you will tend to think that the product is not as good as the product it actually is. In finding how previous reviews and star ratings may infect a customer's view of a product, we made the following assumptions
+For customers, writing reviews and rating products are commonly not completely an individual behavior. For instance, if you see others giving bad comments to a product, you will tend to think that the product is not as good as the product it actually is. In finding how previous reviews and star ratings may infect a customer's view of a product, we made the following assumptions:
 
 \begin{enumerate}[\bfseries 1.]
 \item Assume that the customer is only infected by previous reviews and star ratings. Customers may not be infected by the vendors, the shopping platforms, etc. The final star rating is decided by the customer's experience and other's ratings.
@@ -435,11 +452,11 @@ According to the first 2 assumptions, we define the influence, to determine in w
 \end{equation*}
 Whereas $I$ is the influence, $R$ is the star rating customer tend to give before seeing others reviews, $\bar{R}$ is the average star rating of product before the user gives a rating, which indicates the quality of a product at that time. $\bar{R}_{star}$ is the average of star rating the customer seen, $k_1$ and $k_2$ are constants.
 
-We used object-oriented programming of \textbf{MATLAB} to solve the problem. The source code of the program is in \textbf{Appendix}
+We used object-oriented programming of \textbf{MATLAB} to solve the problem. The source code of the program is in \textbf{Appendix}.
 
 In the program, we defined 2 classes: Customer and Product. Customers has properties like polarity and subjectivity, and product has reviews given by customers. We created the same amount of customers given by the data, set $k_1$ and $k_2$ to different values, then set the polarity and subjectivity of the created customers to the real customers' polarity and subjectivity. And let them to give star ratings of the product one by one in order.
 
-Each customer will see random amount of previous reviews, and the star rating a customer finally give in the stars he may give before seeing the reviews plus the influence $I$
+Each customer will see random amount of previous reviews, and the star rating a customer finally give in the stars he may give before seeing the reviews plus the influence $I$.
 
 We carefully adjust the 2 constants, until the distribution of star ratings those customers gave is similar to the real star ratings in data.
 
@@ -501,9 +518,9 @@ Our assumptions is the same as before. And to ensure the future customers is the
 
 We used the \textbf{Distribution Fitter} app in \textbf{MATLAB} to find the $\sigma$ and $\mu$ of the normal distribution polarity and subjectivity obeys. And we created future customers, whose polarity and subjectivity is generated from the 2 normal distribution we just known.
 
-The rating customers gave before being influenced by other reviews are linearly dependent with their polarity. And the relation is already known in section \ref{sec:The influence among different star ratings and reviews}
+The rating customers gave before being influenced by other reviews are linearly dependent with their polarity. And the relation is already known in section \ref{sec:The influence among different star ratings and reviews}.
 
-For the hair dryers and the pacifier, we created 5000 future customers, and the distribution of their ratings are shown below
+For the hair dryers and the pacifier, we created 5000 future customers, and the distribution of their ratings are shown below:
 
 \begin{figure}[H]
   \centering
